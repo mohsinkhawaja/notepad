@@ -21,7 +21,11 @@ class _ViewScreenState extends State<ViewScreen> {
         ),
         backgroundColor: Colors.purpleAccent.shade100,
       ),
-      body: Column(),
+      body: Center(
+          child: OpenSans(
+        text: 'No Note yet',
+        size: 15.0,
+      )),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Get.snackbar(

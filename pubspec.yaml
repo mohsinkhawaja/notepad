@@ -38,10 +38,12 @@ dependencies:
   get: ^4.6.6
   firebase_core: ^2.25.4
   firebase_auth: ^4.17.4
+  cloud_firestore: ^4.15.4
   http: ^1.2.0
   google_fonts: ^6.1.0
   sign_button: ^2.0.6
   shared_preferences: ^2.2.2
+  logger: ^2.0.2+1
 
 dev_dependencies:
   flutter_test:

@@ -242,3 +242,36 @@ class GoogleSignIn extends StatelessWidget {
     );
   }
 }
+
+DialogBox(BuildContext context, String title) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      actionsAlignment: MainAxisAlignment.center,
+      contentPadding: EdgeInsets.all(32.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+        side: BorderSide(width: 2.0, color: Colors.black),
+      ),
+      title: OpenSans(
+        text: title,
+        size: 20.0,
+      ),
+      actions: [
+        MaterialButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+          color: Colors.black,
+          child: OpenSans(
+            text: "Okay",
+            size: 20.0,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    ),
+  );
+}
