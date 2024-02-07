@@ -5,6 +5,7 @@ import 'firebase_options.dart';
 import 'package:notepad/screens/login_screen.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: LoginScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
