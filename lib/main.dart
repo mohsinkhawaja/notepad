@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'file_handler.dart';
 import 'firebase_options.dart';
 import 'package:notepad/screens/login_screen.dart';
 
@@ -9,6 +10,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // Get.put(ResponsiveHandler()).handleInitialRoute();
   runApp(const MyApp());
 }
 
@@ -25,6 +27,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: LoginScreen(),
+      initialRoute: '/',
       debugShowCheckedModeBanner: false,
     );
   }

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import '../components.dart';
+import '../components/components.dart';
+import '../view_models/auth_view_model.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+TextEditingController _nameController = TextEditingController();
+TextEditingController _userNameController = TextEditingController();
+TextEditingController _emailController = TextEditingController();
+TextEditingController _passwordController = TextEditingController();
 
-  @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
-}
+class SignUpScreen extends StatelessWidget {
+  final AuthViewModel _authViewModel = Get.put(AuthViewModel());
 
-class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     double deviceHeight = Get.height;
@@ -25,12 +26,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
               color: Colors.black,
             ),
             TextForm(
+              controller: _nameController,
               text: "Name",
               hintText: "Enter your name",
             ),
-            TextForm(text: "Email", hintText: "abc@gmail.com"),
-            TextForm(text: "Password", hintText: "*********"),
-            TextForm(text: "Re-enter Password", hintText: "Confirm Password"),
+            TextForm(
+              text: "User Name",
+              hintText: "username",
+              controller: _userNameController,
+            ),
+            TextForm(
+              text: "Email",
+              hintText: "abc@gmail.com",
+              controller: _emailController,
+            ),
+            TextForm(
+              text: "Password",
+              hintText: "Password",
+              controller: _passwordController,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: RegisterAndLogin(text: "Sign Up"),

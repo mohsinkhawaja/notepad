@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notepad/components.dart';
+import 'package:notepad/components/components.dart';
 import 'package:notepad/screens/signup_screen.dart';
+import '../view_models/auth_view_model.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+TextEditingController _emailController = TextEditingController();
+TextEditingController _passwordController = TextEditingController();
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
+class LoginScreen extends StatelessWidget {
+  final AuthViewModel _authViewModel = Get.put(AuthViewModel());
+  LoginScreen({super.key});
 
-class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     double deviceHeight = Get.height;
@@ -30,7 +30,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Colors.black,
                 ),
               ),
-              EmailAndPasswordFields(),
+              TextForm(
+                  text: "Email",
+                  hintText: "abc@gmail.com",
+                  controller: _emailController),
+              TextForm(
+                  text: "Password",
+                  hintText: "********",
+                  controller: _passwordController),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
                 child: RegisterAndLogin(

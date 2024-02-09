@@ -1,90 +1,15 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:notepad/controllers/login_controller.dart';
+import 'package:notepad/screens/note_view.dart';
 import 'package:notepad/screens/signup_screen.dart';
-import 'package:notepad/screens/view_screen.dart';
 import 'package:sign_button/sign_button.dart';
 
-class EmailAndPasswordFields extends StatefulWidget {
-  const EmailAndPasswordFields({super.key});
-
-  @override
-  State<EmailAndPasswordFields> createState() => _EmailAndPasswordFieldsState();
-}
-
-class _EmailAndPasswordFieldsState extends State<EmailAndPasswordFields> {
-  LoginController controller = Get.put(LoginController());
-  @override
-  Widget build(BuildContext context) {
-    var eyeClosed = true.obs;
-    return Column(
-      children: [
-        //Email Field
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
-          child: SizedBox(
-            width: 350.0,
-            child: TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              textAlign: TextAlign.start,
-              controller: controller.emailController.value,
-              decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                prefixIcon: Icon(
-                  Icons.email,
-                  color: Colors.black,
-                  size: 30.0,
-                ),
-                hintText: "Email",
-                hintStyle: GoogleFonts.openSans(),
-              ),
-            ),
-          ),
-        ),
-
-        //Password Field
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
-          child: SizedBox(
-            width: 350.0,
-            child: TextFormField(
-              textAlign: TextAlign.start,
-              controller: controller.passwordController.value,
-              obscureText: eyeClosed.value,
-              decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  prefixIcon: IconButton(
-                    icon: Icon(
-                      Icons.lock,
-                      color: Colors.black,
-                      size: 30.0,
-                    ),
-                    onPressed: () {},
-                  ),
-                  hintText: "Password",
-                  hintStyle: GoogleFonts.openSans(),
-                  suffix: Obx(() => InkWell(
-                        child: eyeClosed.value
-                            ? Icon(Icons.visibility_off, color: Colors.grey)
-                            : Icon(Icons.visibility, color: Colors.purple),
-                        onTap: () {
-                          eyeClosed.value = !eyeClosed.value;
-                        },
-                      ))),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
+import '../view_models/auth_view_model.dart';
 
 class OpenSans extends StatelessWidget {
   final text;
@@ -138,48 +63,22 @@ class Poppins extends StatelessWidget {
   }
 }
 
-class RegisterAndLogin extends StatelessWidget {
-  final text;
-  const RegisterAndLogin({super.key, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        //Login
-        SizedBox(
-          height: 50.0,
-          width: 150.0,
-          child: MaterialButton(
-            child: OpenSans(
-              text: text,
-              size: 24.0,
-              color: Colors.white,
-            ),
-            onPressed: () async {
-              await Get.off(ViewScreen());
-            },
-            splashColor: Colors.grey,
-            color: Colors.black,
-            elevation: 2.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-          ),
-        ),
-      ],
-    );
-  }
-}
+TextEditingController _nameController = TextEditingController();
+TextEditingController _userNameController = TextEditingController();
+TextEditingController _emailController = TextEditingController();
+TextEditingController _passwordController = TextEditingController();
 
 class TextForm extends StatelessWidget {
+  // final AuthViewModel _authViewModel = Get.put(AuthViewModel());
   final text;
   final hintText;
-
-  const TextForm({
+  final controller;
+  TextForm({
     Key? key,
     required this.text,
     required this.hintText,
+    // required TextEditingController controller,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -197,6 +96,7 @@ class TextForm extends StatelessWidget {
           SizedBox(height: 5.0),
           SizedBox(
             child: TextFormField(
+              controller: controller,
               decoration: InputDecoration(
                 errorBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.red),
@@ -221,6 +121,62 @@ class TextForm extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class RegisterAndLogin extends StatelessWidget {
+  final text;
+
+  const RegisterAndLogin({
+    super.key,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        //Login
+        SizedBox(
+          height: 50.0,
+          width: 150.0,
+          child: MaterialButton(
+            child: OpenSans(
+              text: text,
+              size: 24.0,
+              color: Colors.white,
+            ),
+            onPressed: () async {
+              await Get.off(NoteViewScreen());
+              // var userName = _userNameController.text.trim();
+              // var name = _nameController.text.trim();
+              // var userEmail = _emailController.text.trim();
+              // var userPassword = _passwordController.text.trim();
+              // await FirebaseAuth.instance
+              //     .createUserWithEmailAndPassword(
+              //         email: userEmail, password: userPassword)
+              //     .then((value) => {
+              //           FirebaseFirestore.instance
+              //               .collection('users')
+              //               .doc()
+              //               .set({
+              //             userName: 'userName',
+              //             name: 'name',
+              //             userEmail: 'userEmail'
+              //           }),
+              //         });
+              //await ;
+            },
+            splashColor: Colors.grey,
+            color: Colors.black,
+            elevation: 2.0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -275,3 +231,5 @@ DialogBox(BuildContext context, String title) {
     ),
   );
 }
+
+class NoteViewModel {}
