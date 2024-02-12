@@ -1,9 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:notepad/screens/note_view.dart';
 import 'package:sign_button/sign_button.dart';
 
 import '../view_model.dart';
@@ -332,6 +329,7 @@ class GoogleSignIn extends StatelessWidget {
       child: SignInButton(
         buttonType: ButtonType.google,
         btnColor: Colors.black,
+        btnText: 'Sign Up with Google',
         btnTextColor: Colors.white,
         buttonSize: ButtonSize.large, // small(default), medium, large
         onPressed: () async {

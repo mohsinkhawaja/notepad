@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notepad/components/components.dart';
-import 'package:notepad/screens/signup_screen.dart';
-
 import '../view_model.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -23,7 +21,7 @@ class LoginScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 25.0),
                 child: Poppins(
-                  text: 'SignIn',
+                  text: 'Sign In',
                   size: 30.0,
                   color: Colors.black,
                 ),

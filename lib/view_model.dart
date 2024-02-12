@@ -5,9 +5,9 @@ import 'package:google_sign_in/google_sign_in.dart' as google;
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:notepad/screens/edit_note_screen.dart';
+import 'package:notepad/screens/login_screen.dart';
 import 'package:notepad/screens/note_view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-//import 'src/sign_in_button.dart';
 import 'components/components.dart';
 import 'model.dart';
 
@@ -69,7 +69,6 @@ class AuthViewModel extends GetxController {
 
         await _auth.signInWithCredential(credential);
 
-        // Navigate to NoteViewScreen after successful sign-in
         Get.offAll(() => NoteViewScreen());
       }
     } catch (error) {
@@ -81,6 +80,8 @@ class AuthViewModel extends GetxController {
   Future<void> signOut() async {
     try {
       await _auth.signOut();
+      currentUser.value = null; // Clear the user state
+      Get.offAll(() => LoginScreen()); // Navigate to the sign-in screen
     } catch (error) {
       Get.snackbar('Error', error.toString(),
           snackPosition: SnackPosition.BOTTOM);
@@ -88,8 +89,12 @@ class AuthViewModel extends GetxController {
   }
 }
 
+final AuthViewModel _authViewModel = Get.put(AuthViewModel());
+
 class NoteViewModel extends GetxController {
   TextEditingController noteController = TextEditingController();
+  var logger = Logger();
+
   RxList<Note> notes = RxList<Note>([]);
 
   @override
@@ -103,6 +108,8 @@ class NoteViewModel extends GetxController {
       var snapshot = await FirebaseFirestore.instance
           .collection("notes")
           .where("userId", isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+          .orderBy("createdAt",
+              descending: true) // Sort by createdAt in descending order
           .get();
 
       notes.assignAll(snapshot.docs
@@ -157,6 +164,15 @@ class NoteViewModel extends GetxController {
     } catch (error) {
       // Handle error
       print("Error editing note: $error");
+    }
+  }
+
+  Future<void> signout() async {
+    try {
+      await _authViewModel.signOut(); // Use _authViewModel for signOut
+    } catch (error) {
+      // Handle error
+      print("Error signing out: $error");
     }
   }
 }

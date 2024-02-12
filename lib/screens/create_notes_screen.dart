@@ -1,23 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:notepad/components/components.dart';
 
 import '../view_model.dart';
 
-class CreateNoteScreen extends StatefulWidget {
-  const CreateNoteScreen({super.key});
-
-  @override
-  State<CreateNoteScreen> createState() => _CreateNoteScreenState();
-}
-
-class _CreateNoteScreenState extends State<CreateNoteScreen> {
+class CreateNoteScreen extends StatelessWidget {
+  CreateNoteScreen({super.key});
   TextEditingController noteController = TextEditingController();
-  final NoteViewModel _noteViewModel =
-      Get.find(); // Use Get.find() to get the existing instance
-  User? user = FirebaseAuth.instance.currentUser;
+
+  final NoteViewModel _noteViewModel = Get.find();
+  //User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +42,11 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
                   Get.back(); // Close the CreateNoteScreen
                 }
               },
-              child: Text("Add"),
+              child: Poppins(
+                text: "Done",
+                size: 15.0,
+                color: Colors.deepPurple.shade500,
+              ),
             )
           ],
         ),

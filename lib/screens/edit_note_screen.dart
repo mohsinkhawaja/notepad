@@ -5,7 +5,6 @@ import '../view_model.dart';
 
 class EditNoteScreen extends StatelessWidget {
   EditNoteScreen({Key? key}) : super(key: key);
-
   TextEditingController noteController = TextEditingController();
 
   final NoteViewModel _noteViewModel = Get.find();
@@ -40,8 +39,6 @@ class EditNoteScreen extends StatelessWidget {
                   content: noteController.text,
                   createdAt: note.createdAt,
                 );
-
-                // Return the updated note
                 Get.back(result: updatedNote);
               },
               child: Text("Update"),
@@ -52,42 +49,3 @@ class EditNoteScreen extends StatelessWidget {
     );
   }
 }
-
-// class _EditNoteScreenState extends State<EditNoteScreen> {
-//   TextEditingController noteController = TextEditingController();
-//   final NoteViewModel _noteViewModel = Get.find();
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final Note note = Get.arguments['note'];
-//     noteController.text =
-//         note.content; // Set the initial text to the current note content
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Edit Note"),
-//       ),
-//       body: Container(
-//         margin: EdgeInsets.symmetric(horizontal: 10.0),
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             TextFormField(
-//               controller: noteController,
-//               decoration: InputDecoration(
-//                 border: InputBorder.none,
-//                 hintText: "Edit Note",
-//               ),
-//             ),
-//             ElevatedButton(
-//               onPressed: () async {
-//                 await _noteViewModel.editNote(note, noteController.text);
-//                 Get.back(); // Go back to the previous screen
-//               },
-//               child: Text("Update"),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

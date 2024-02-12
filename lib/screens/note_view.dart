@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../view_model.dart';
 import 'create_notes_screen.dart';
-import 'edit_note_screen.dart';
 
 class NoteViewScreen extends StatelessWidget {
   final NoteViewModel _noteViewModel = Get.find();
@@ -12,12 +12,19 @@ class NoteViewScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Notepad'),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await _noteViewModel.signout();
+            },
+            icon: Icon(Icons.logout),
+          ),
+        ],
       ),
       body: Container(
         child: Center(
           child: Obx(() {
             var notes = _noteViewModel.notes;
-
             if (notes.isEmpty) {
               return Center(child: Text("Data not found"));
             }
@@ -26,11 +33,13 @@ class NoteViewScreen extends StatelessWidget {
               itemCount: notes.length,
               itemBuilder: (context, index) {
                 var note = notes[index];
-
                 return Card(
                   child: ListTile(
                     title: Text(note.content),
-                    subtitle: Text(note.userId),
+                    // subtitle: Text(note.userId),
+                    subtitle: Text(
+                      DateFormat.yMd().add_jm().format(note.createdAt),
+                    ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -56,11 +65,12 @@ class NoteViewScreen extends StatelessWidget {
           }),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Get.to(CreateNoteScreen());
         },
-        child: Icon(Icons.add),
+        label: const Text('Add Note'),
+        icon: Icon(Icons.add),
       ),
     );
   }
