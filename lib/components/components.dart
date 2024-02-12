@@ -1,15 +1,12 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notepad/screens/note_view.dart';
-import 'package:notepad/screens/signup_screen.dart';
 import 'package:sign_button/sign_button.dart';
 
-import '../view_models/auth_view_model.dart';
+import '../view_model.dart';
 
 class OpenSans extends StatelessWidget {
   final text;
@@ -68,69 +65,165 @@ TextEditingController _userNameController = TextEditingController();
 TextEditingController _emailController = TextEditingController();
 TextEditingController _passwordController = TextEditingController();
 
-class TextForm extends StatelessWidget {
-  // final AuthViewModel _authViewModel = Get.put(AuthViewModel());
-  final text;
-  final hintText;
-  final controller;
-  TextForm({
+class EmailPasswordFields extends StatelessWidget {
+  final AuthViewModel _authViewModel = Get.put(AuthViewModel());
+
+  EmailPasswordFields({
     Key? key,
-    required this.text,
-    required this.hintText,
-    // required TextEditingController controller,
-    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-      child: Column(
-        //mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          OpenSans(
-            size: 13.0,
-            text: text,
-          ),
-          SizedBox(height: 5.0),
-          SizedBox(
-            child: TextFormField(
-              controller: controller,
-              decoration: InputDecoration(
-                errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red),
-                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                ),
+    return Column(
+      children: [
+        //Email
+        SizedBox(
+          width: 350.0,
+          child: TextFormField(
+            keyboardType: TextInputType.emailAddress,
+            textAlign: TextAlign.center,
+            controller: _emailController,
+            decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.teal),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.tealAccent, width: 2.0),
-                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                prefixIcon: Icon(
+                  Icons.email,
+                  color: Colors.black,
+                  size: 30.0,
                 ),
-                hintText: hintText,
-                hintStyle: GoogleFonts.poppins(fontSize: 13.0),
-              ),
-            ),
+                hintText: "Email",
+                hintStyle: GoogleFonts.openSans()),
           ),
-        ],
-      ),
+        ),
+        SizedBox(height: 20),
+        //Password
+        SizedBox(
+          width: 350.0,
+          child: TextFormField(
+            textAlign: TextAlign.center,
+            controller: _passwordController,
+            obscureText: true,
+            decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                prefixIcon: Icon(
+                  Icons.visibility,
+                  color: Colors.black,
+                  size: 30.0,
+                ),
+                hintText: "Password",
+                hintStyle: GoogleFonts.openSans()),
+          ),
+        ),
+      ],
     );
   }
 }
 
-class RegisterAndLogin extends StatelessWidget {
-  final text;
+class RegistrationFields extends StatelessWidget {
+  const RegistrationFields({super.key});
 
-  const RegisterAndLogin({
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        //Email
+        SizedBox(
+          width: 350.0,
+          child: TextFormField(
+            textAlign: TextAlign.center,
+            controller: _nameController,
+            decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                prefixIcon: Icon(
+                  Icons.person_add_alt_1_outlined,
+                  color: Colors.black,
+                  size: 30.0,
+                ),
+                hintText: "Name",
+                hintStyle: GoogleFonts.openSans()),
+          ),
+        ),
+        SizedBox(height: 20),
+        SizedBox(
+          width: 350.0,
+          child: TextFormField(
+            textAlign: TextAlign.center,
+            controller: _userNameController,
+            decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                prefixIcon: Icon(
+                  Icons.verified_user_sharp,
+                  color: Colors.black,
+                  size: 30.0,
+                ),
+                hintText: "username",
+                hintStyle: GoogleFonts.openSans()),
+          ),
+        ),
+        SizedBox(height: 20),
+        SizedBox(
+          width: 350.0,
+          child: TextFormField(
+            keyboardType: TextInputType.emailAddress,
+            textAlign: TextAlign.center,
+            controller: _emailController,
+            decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                prefixIcon: Icon(
+                  Icons.email,
+                  color: Colors.black,
+                  size: 30.0,
+                ),
+                hintText: "Email",
+                hintStyle: GoogleFonts.openSans()),
+          ),
+        ),
+        SizedBox(height: 20),
+        //Password
+        SizedBox(
+          width: 350.0,
+          child: TextFormField(
+            textAlign: TextAlign.center,
+            controller: _passwordController,
+            obscureText: true,
+            decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                prefixIcon: Icon(
+                  Icons.visibility,
+                  color: Colors.black,
+                  size: 30.0,
+                ),
+                hintText: "Password",
+                hintStyle: GoogleFonts.openSans()),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class Login extends StatelessWidget {
+  final AuthViewModel _authViewModel = Get.put(AuthViewModel());
+  Login({
     super.key,
-    required this.text,
   });
 
   @override
@@ -144,30 +237,76 @@ class RegisterAndLogin extends StatelessWidget {
           width: 150.0,
           child: MaterialButton(
             child: OpenSans(
-              text: text,
+              text: "Sign In",
               size: 24.0,
               color: Colors.white,
             ),
             onPressed: () async {
-              await Get.off(NoteViewScreen());
+              await _authViewModel.signInWithEmailAndPassword(
+                  context, _emailController.text, _passwordController.text);
+            },
+            splashColor: Colors.grey,
+            color: Colors.black,
+            elevation: 2.0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class Signup extends StatelessWidget {
+  final AuthViewModel _authViewModel = Get.put(AuthViewModel());
+  Signup({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        //Login
+        SizedBox(
+          height: 50.0,
+          width: 150.0,
+          child: MaterialButton(
+            child: OpenSans(
+              text: "Sign Up",
+              size: 24.0,
+              color: Colors.white,
+            ),
+            onPressed: () async {
+              await _authViewModel.createUserWithEmailAndPassword(
+                  context, _emailController.text, _passwordController.text);
               // var userName = _userNameController.text.trim();
               // var name = _nameController.text.trim();
               // var userEmail = _emailController.text.trim();
               // var userPassword = _passwordController.text.trim();
-              // await FirebaseAuth.instance
-              //     .createUserWithEmailAndPassword(
-              //         email: userEmail, password: userPassword)
-              //     .then((value) => {
-              //           FirebaseFirestore.instance
-              //               .collection('users')
-              //               .doc()
-              //               .set({
-              //             userName: 'userName',
-              //             name: 'name',
-              //             userEmail: 'userEmail'
-              //           }),
-              //         });
-              //await ;
+              //
+              // try {
+              //   UserCredential userCredential =
+              //       await FirebaseAuth.instance.createUserWithEmailAndPassword(
+              //     email: userEmail,
+              //     password: userPassword,
+              //   );
+              //
+              //   await FirebaseFirestore.instance
+              //       .collection('users')
+              //       .doc(userCredential.user?.uid)
+              //       .set({
+              //     'userName': userName,
+              //     'name': name,
+              //     'userEmail': userEmail,
+              //   });
+              //
+              //   Get.off(NoteViewScreen());
+              // } catch (e) {
+              //   print("Error signing up: $e");
+              //   // Handle the error, you can also show a dialog or toast here
+              // }
             },
             splashColor: Colors.grey,
             color: Colors.black,
@@ -182,7 +321,9 @@ class RegisterAndLogin extends StatelessWidget {
 }
 
 class GoogleSignIn extends StatelessWidget {
-  const GoogleSignIn({super.key});
+  final AuthViewModel _authViewModel = Get.put(AuthViewModel());
+
+  GoogleSignIn({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +334,9 @@ class GoogleSignIn extends StatelessWidget {
         btnColor: Colors.black,
         btnTextColor: Colors.white,
         buttonSize: ButtonSize.large, // small(default), medium, large
-        onPressed: () async {},
+        onPressed: () async {
+          await _authViewModel.signInWithGoogle();
+        },
       ),
     );
   }
@@ -231,5 +374,3 @@ DialogBox(BuildContext context, String title) {
     ),
   );
 }
-
-class NoteViewModel {}

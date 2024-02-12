@@ -11,7 +11,8 @@ class CreateNoteScreen extends StatefulWidget {
 
 class _CreateNoteScreenState extends State<CreateNoteScreen> {
   TextEditingController noteController = TextEditingController();
-  User? userId = FirebaseAuth.instance.currentUser;
+  User? user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,28 +30,28 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
                 controller: noteController,
                 maxLines: null,
                 decoration: InputDecoration(
-                    border: InputBorder.none, hintText: "Add Note"),
+                  border: InputBorder.none,
+                  hintText: "Add Note",
+                ),
               ),
             ),
             ElevatedButton(
-                onPressed: () async {
-                  var note = noteController.text.trim();
-                  if (note != "") {
-                    try {
-                      await FirebaseFirestore.instance
-                          .collection("notes")
-                          .doc()
-                          .set({
-                        "note": note,
-                        "userId": userId?.uid,
-                        "createdAt": DateTime.now(),
-                      });
-                    } catch (e) {
-                      print("Error $e");
-                    }
+              onPressed: () async {
+                var note = noteController.text.trim();
+                if (note != "") {
+                  try {
+                    await FirebaseFirestore.instance.collection("notes").add({
+                      "note": note,
+                      "userId": user?.uid,
+                      "createdAt": DateTime.now(),
+                    });
+                  } catch (e) {
+                    print("Error $e");
                   }
-                },
-                child: Text("Add"))
+                }
+              },
+              child: Text("Add"),
+            )
           ],
         ),
       ),

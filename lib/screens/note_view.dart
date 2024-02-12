@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:notepad/screens/create_notes_screen.dart';
 import 'package:notepad/screens/edit_note_screen.dart';
 
-import '../components/components.dart';
-
 class NoteViewScreen extends StatefulWidget {
   const NoteViewScreen({super.key});
 
@@ -15,7 +13,8 @@ class NoteViewScreen extends StatefulWidget {
 }
 
 class _NoteViewScreenState extends State<NoteViewScreen> {
-  User? userId = FirebaseAuth.instance.currentUser;
+  User? user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,8 +25,8 @@ class _NoteViewScreenState extends State<NoteViewScreen> {
         child: Center(
           child: StreamBuilder(
             stream: FirebaseFirestore.instance
-                .collection("note")
-                .where("userId", isEqualTo: userId?.uid)
+                .collection("notes")
+                .where("userId", isEqualTo: user?.uid)
                 .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {

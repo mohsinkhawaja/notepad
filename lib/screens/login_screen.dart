@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notepad/components/components.dart';
 import 'package:notepad/screens/signup_screen.dart';
-import '../view_models/auth_view_model.dart';
 
-TextEditingController _emailController = TextEditingController();
-TextEditingController _passwordController = TextEditingController();
+import '../view_model.dart';
 
 class LoginScreen extends StatelessWidget {
   final AuthViewModel _authViewModel = Get.put(AuthViewModel());
@@ -30,19 +28,10 @@ class LoginScreen extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
-              TextForm(
-                  text: "Email",
-                  hintText: "abc@gmail.com",
-                  controller: _emailController),
-              TextForm(
-                  text: "Password",
-                  hintText: "********",
-                  controller: _passwordController),
+              EmailPasswordFields(),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: RegisterAndLogin(
-                  text: "Login",
-                ),
+                child: Login(),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,7 +44,7 @@ class LoginScreen extends StatelessWidget {
                       style: TextStyle(fontSize: 15.0),
                     ),
                     onPressed: () async {
-                      await Get.to(SignUpScreen());
+                      await Get.toNamed('/SignUpScreen');
                     },
                   )
                 ],

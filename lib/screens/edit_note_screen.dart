@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'note_view.dart';
 
 class EditNoteScreen extends StatefulWidget {
@@ -13,6 +12,7 @@ class EditNoteScreen extends StatefulWidget {
 
 class _EditNoteScreenState extends State<EditNoteScreen> {
   TextEditingController noteController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +28,9 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
               controller: noteController
                 ..text = "${Get.arguments['note'].toString()}",
               decoration: InputDecoration(
-                  border: InputBorder.none, hintText: "Add Note"),
+                border: InputBorder.none,
+                hintText: "Add Note",
+              ),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -37,11 +39,9 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                     .doc(Get.arguments['docId'].toString())
                     .update({
                   'note': noteController.text.trim(),
-                }).then((value) => {
-                          Get.offAll(
-                            () => NoteViewScreen(),
-                          )
-                        });
+                }).then((value) {
+                  Get.offAll(() => NoteViewScreen());
+                });
               },
               child: Text("Update"),
             ),
