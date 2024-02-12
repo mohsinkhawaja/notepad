@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
+import '../view_model.dart';
 
 class CreateNoteScreen extends StatefulWidget {
   const CreateNoteScreen({super.key});
@@ -11,6 +15,8 @@ class CreateNoteScreen extends StatefulWidget {
 
 class _CreateNoteScreenState extends State<CreateNoteScreen> {
   TextEditingController noteController = TextEditingController();
+  final NoteViewModel _noteViewModel =
+      Get.find(); // Use Get.find() to get the existing instance
   User? user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -39,15 +45,8 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
               onPressed: () async {
                 var note = noteController.text.trim();
                 if (note != "") {
-                  try {
-                    await FirebaseFirestore.instance.collection("notes").add({
-                      "note": note,
-                      "userId": user?.uid,
-                      "createdAt": DateTime.now(),
-                    });
-                  } catch (e) {
-                    print("Error $e");
-                  }
+                  await _noteViewModel.addNote(note);
+                  Get.back(); // Close the CreateNoteScreen
                 }
               },
               child: Text("Add"),

@@ -1,20 +1,20 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'note_view.dart';
+import '../model.dart';
+import '../view_model.dart';
 
-class EditNoteScreen extends StatefulWidget {
-  const EditNoteScreen({super.key});
+class EditNoteScreen extends StatelessWidget {
+  EditNoteScreen({Key? key}) : super(key: key);
 
-  @override
-  State<EditNoteScreen> createState() => _EditNoteScreenState();
-}
-
-class _EditNoteScreenState extends State<EditNoteScreen> {
   TextEditingController noteController = TextEditingController();
+
+  final NoteViewModel _noteViewModel = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    final Note note = Get.arguments['note'];
+    noteController.text = Get.arguments['noteContent'];
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Note"),
@@ -25,23 +25,24 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextFormField(
-              controller: noteController
-                ..text = "${Get.arguments['note'].toString()}",
+              controller: noteController,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: "Add Note",
+                hintText: "Edit Note",
               ),
             ),
             ElevatedButton(
               onPressed: () async {
-                await FirebaseFirestore.instance
-                    .collection("notes")
-                    .doc(Get.arguments['docId'].toString())
-                    .update({
-                  'note': noteController.text.trim(),
-                }).then((value) {
-                  Get.offAll(() => NoteViewScreen());
-                });
+                // Create an updated note with the new content
+                var updatedNote = Note(
+                  id: note.id,
+                  userId: note.userId,
+                  content: noteController.text,
+                  createdAt: note.createdAt,
+                );
+
+                // Return the updated note
+                Get.back(result: updatedNote);
               },
               child: Text("Update"),
             ),
@@ -51,3 +52,42 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
     );
   }
 }
+
+// class _EditNoteScreenState extends State<EditNoteScreen> {
+//   TextEditingController noteController = TextEditingController();
+//   final NoteViewModel _noteViewModel = Get.find();
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final Note note = Get.arguments['note'];
+//     noteController.text =
+//         note.content; // Set the initial text to the current note content
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text("Edit Note"),
+//       ),
+//       body: Container(
+//         margin: EdgeInsets.symmetric(horizontal: 10.0),
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             TextFormField(
+//               controller: noteController,
+//               decoration: InputDecoration(
+//                 border: InputBorder.none,
+//                 hintText: "Edit Note",
+//               ),
+//             ),
+//             ElevatedButton(
+//               onPressed: () async {
+//                 await _noteViewModel.editNote(note, noteController.text);
+//                 Get.back(); // Go back to the previous screen
+//               },
+//               child: Text("Update"),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

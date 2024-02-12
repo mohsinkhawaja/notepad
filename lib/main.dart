@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:notepad/screens/edit_note_screen.dart';
 import 'package:notepad/screens/login_screen.dart';
 import 'package:notepad/screens/signup_screen.dart';
+import 'package:notepad/view_model.dart';
 import 'firebase_options.dart';
 import 'screens/create_notes_screen.dart';
 import 'screens/note_view.dart';
@@ -29,7 +30,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginScreen(),
+      initialBinding: BindingsBuilder(() {
+        Get.put(NoteViewModel()); // Inject NoteViewModel
+      }),
       initialRoute: '/',
       getPages: [
         GetPage(name: '/', page: () => LoginScreen()),
