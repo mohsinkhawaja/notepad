@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:notepad/responsive_handler.dart';
 import 'package:notepad/screens/edit_note_screen.dart';
-import 'package:notepad/screens/login_screen.dart';
 import 'package:notepad/screens/signup_screen.dart';
 import 'package:notepad/view_model.dart';
 import 'firebase_options.dart';
@@ -14,16 +14,15 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    //ThemeController themeController = Get.put(ThemeController());
     return GetMaterialApp(
       title: 'Notes App',
       theme: ThemeData(
@@ -31,16 +30,15 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       initialBinding: BindingsBuilder(() {
-        Get.put(NoteViewModel()); // Inject NoteViewModel
+        Get.put(NoteViewModel());
       }),
-      initialRoute: '/',
+      initialRoute: '/', // Add an initial route
       getPages: [
-        GetPage(name: '/', page: () => LoginScreen()),
+        GetPage(name: '/', page: () => ResponsiveHandler()),
         GetPage(name: '/SignUpScreen', page: () => SignUpScreen()),
         GetPage(name: '/NoteViewScreen', page: () => NoteViewScreen()),
         GetPage(name: '/CreateNoteScreen', page: () => CreateNoteScreen()),
         GetPage(name: '/EditNoteScreen', page: () => EditNoteScreen()),
-        // Add more routes as needed
       ],
       debugShowCheckedModeBanner: false,
     );
