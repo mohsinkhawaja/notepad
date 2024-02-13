@@ -16,7 +16,7 @@ class _ResponsiveHandlerState extends State<ResponsiveHandler> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       handleAuthentication();
     });
   }

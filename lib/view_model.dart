@@ -99,23 +99,25 @@ class NoteViewModel extends GetxController {
 
   @override
   void onInit() {
-    fetchNotes(); // Fetch notes when the ViewModel is initialized
+    fetchNotes();
     super.onInit();
   }
 
   Future<void> fetchNotes() async {
     try {
-      var snapshot = await FirebaseFirestore.instance
-          .collection("notes")
-          .where("userId", isEqualTo: FirebaseAuth.instance.currentUser?.uid)
-          .orderBy("createdAt",
-              descending: true) // Sort by createdAt in descending order
-          .get();
+      var user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        var snapshot = await FirebaseFirestore.instance
+            .collection("notes")
+            .where("userId", isEqualTo: user.uid) // Filter by user's UID
+            .orderBy("createdAt", descending: true)
+            .get();
 
-      notes.assignAll(snapshot.docs
-          .map(
-              (doc) => Note.fromMap(doc.data() as Map<String, dynamic>, doc.id))
-          .toList());
+        notes.assignAll(snapshot.docs
+            .map((doc) =>
+                Note.fromMap(doc.data() as Map<String, dynamic>, doc.id))
+            .toList());
+      }
     } catch (error) {
       print("Error fetching notes: $error");
     }
@@ -123,15 +125,29 @@ class NoteViewModel extends GetxController {
 
   Future<void> addNote(String noteContent) async {
     try {
+      var user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        // If user is not logged in, show an error or handle it accordingly
+        print("User not logged in");
+        return;
+      }
+
+      // Check if the note is empty
+      if (noteContent.trim().isEmpty) {
+        // If note is empty, show an error or handle it accordingly
+        print("Note content is empty");
+        return;
+      }
+
+      // Add note to Firebase
       await FirebaseFirestore.instance.collection("notes").add({
-        "note": noteContent,
-        "userId": FirebaseAuth.instance.currentUser?.uid,
+        "note": noteContent.trim(),
+        "userId": user.uid,
         "createdAt": DateTime.now(),
       });
 
-      await fetchNotes(); // Fetch the updated list of notes
+      await fetchNotes();
     } catch (error) {
-      // Handle error
       print("Error adding note: $error");
     }
   }
@@ -167,11 +183,25 @@ class NoteViewModel extends GetxController {
     }
   }
 
-  Future<void> signout() async {
+  Future<void> updateNoteContent(Note note, String updatedContent) async {
     try {
-      await _authViewModel.signOut(); // Use _authViewModel for signOut
+      noteController.text = updatedContent.trim();
+      await FirebaseFirestore.instance
+          .collection("notes")
+          .doc(note.id)
+          .update({'note': updatedContent.trim()});
+
+      await fetchNotes();
     } catch (error) {
       // Handle error
+      print("Error updating note content: $error");
+    }
+  }
+
+  Future<void> signout() async {
+    try {
+      await _authViewModel.signOut();
+    } catch (error) {
       print("Error signing out: $error");
     }
   }

@@ -5,14 +5,12 @@ import '../view_model.dart';
 
 class EditNoteScreen extends StatelessWidget {
   EditNoteScreen({Key? key}) : super(key: key);
-  TextEditingController noteController = TextEditingController();
-
   final NoteViewModel _noteViewModel = Get.find();
 
   @override
   Widget build(BuildContext context) {
     final Note note = Get.arguments['note'];
-    noteController.text = Get.arguments['noteContent'];
+    _noteViewModel.noteController.text = Get.arguments['noteContent'];
 
     return Scaffold(
       appBar: AppBar(
@@ -24,7 +22,7 @@ class EditNoteScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextFormField(
-              controller: noteController,
+              controller: _noteViewModel.noteController,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: "Edit Note",
@@ -32,14 +30,9 @@ class EditNoteScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                // Create an updated note with the new content
-                var updatedNote = Note(
-                  id: note.id,
-                  userId: note.userId,
-                  content: noteController.text,
-                  createdAt: note.createdAt,
-                );
-                Get.back(result: updatedNote);
+                await _noteViewModel.updateNoteContent(
+                    note, _noteViewModel.noteController.text.trim());
+                Get.back(result: true); // Indicate successful update
               },
               child: Text("Update"),
             ),

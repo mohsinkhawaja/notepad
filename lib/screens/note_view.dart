@@ -5,7 +5,7 @@ import '../view_model.dart';
 import 'create_notes_screen.dart';
 
 class NoteViewScreen extends StatelessWidget {
-  final NoteViewModel _noteViewModel = Get.find();
+  final NoteViewModel _noteViewModel = Get.put(NoteViewModel());
 
   @override
   Widget build(BuildContext context) {

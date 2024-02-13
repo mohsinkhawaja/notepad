@@ -29,9 +29,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialBinding: BindingsBuilder(() {
-        Get.put(NoteViewModel());
-      }),
+      // initialBinding: BindingsBuilder(() {
+      //   Get.put(NoteViewModel());
+      // }),
       initialRoute: '/', // Add an initial route
       getPages: [
         GetPage(name: '/', page: () => ResponsiveHandler()),

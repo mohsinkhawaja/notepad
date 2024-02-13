@@ -8,9 +8,7 @@ import '../view_model.dart';
 class CreateNoteScreen extends StatelessWidget {
   CreateNoteScreen({super.key});
   TextEditingController noteController = TextEditingController();
-
   final NoteViewModel _noteViewModel = Get.find();
-  //User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +35,8 @@ class CreateNoteScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () async {
                 var note = noteController.text.trim();
-                if (note != "") {
-                  await _noteViewModel.addNote(note);
-                  Get.back(); // Close the CreateNoteScreen
-                }
+                await _noteViewModel.addNote(note);
+                Get.back(); // Close the CreateNoteScreen
               },
               child: Poppins(
                 text: "Done",
